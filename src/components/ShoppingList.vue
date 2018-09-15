@@ -1,8 +1,19 @@
 <template>
   <div id="app">
         <h2>{{ title }}</h2>
-        <input v-model="newItem" @keyup.enter="addItem" placeholder="add shopping list item" type="text">
-        <button @click="addItem">Add product</button>
+        <form @submit.prevent="addItem">
+            <input
+                name="task"
+                v-model="newItem" 
+                type="text"
+                placeholder="add shopping list item"
+                v-validate="'required'"
+            >
+            <button type="submit">Add task</button>
+            <div v-show="errors.has('task')">
+                {{ errors.first('task') }}
+            </div>
+        </form>
         <ul>
             <li v-for="(item, key) in list" v-bind:key="item.id">{{ item.name }}   <button @click="removeItem(key)">Remove</button></li>
         </ul>
@@ -26,15 +37,18 @@ export default {
     },
     methods: {
         addItem() {
-            const text = this.newItem.trim();
+            this.$validator.validateAll().then(result => {
+                const text = this.newItem.trim();
 
-            if (text) {
-                this.list.push({
-                    id: this.list.length,
-                    name: text,
-                });
-                this.newItem = '';
-            }
+                if (text) {
+                    this.list.push({
+                        id: this.list.length,
+                        name: text,
+                    });
+                    this.newItem = '';
+                    this.$validator.reset();
+                }
+            });
         },
         removeItem(id) {
             this.list.splice(id, 1);
@@ -51,5 +65,9 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+
+li {
+  list-style: none;
 }
 </style>
