@@ -13,6 +13,7 @@
                 {{ errors.first('productName') }}
             </div>
             <input
+                class="margin-left-10"
                 name="productQty"
                 v-model="newItem.qty" 
                 type="text"
@@ -22,10 +23,15 @@
             <div v-show="errors.has('productQty')">
                 {{ errors.first('productQty') }}
             </div>
+            
             <button type="submit">Add task</button>
         </form>
         <ul>
-            <li v-for="(item, key) in list" v-bind:key="item.id">{{ item.name }}, {{ item.qty }}   <button @click="removeItem(key)">Remove</button></li>
+            <li v-for="(item, key) in list" v-bind:key="item.id">
+                <span>Name: {{ item.name }}</span>
+                <span class="margin-left-10">Qty: {{ item.qty }}</span>
+                <button class="margin-left-10" @click="removeItem(key)">Remove</button>
+            </li>
         </ul>
     </div>
 </template>
@@ -38,7 +44,16 @@ export default {
             newItem: {
                 name: '',
             },
-            list: [],
+            list: [{
+                id: 0,
+                name: 'Milk',
+                qty: 2,
+            },
+            {
+                id: 1,
+                name: 'Coffe',
+                qty: 10,
+            }],
         }
     },
     methods: {
@@ -77,5 +92,9 @@ export default {
 
 li {
   list-style: none;
+}
+
+.margin-left-10 {
+    margin-left: 10px;
 }
 </style>
