@@ -60,11 +60,14 @@ export default {
         addItem() {
             this.$validator.validateAll().then(result => {
                 const text = this.newItem.name.trim();
-                const isNumber = Number.isInteger(this.newItem.qty)
+                const qtyToInt = parseInt(this.newItem.qty)
+                const isNumber = Number.isInteger(qtyToInt)
+                
                 if (text && isNumber) {
                     this.list.push({
                         id: this.list.length,
-                        ...this.newItem,
+                        name: text,
+                        qty: qtyToInt,
                     });
                     this.newItem = {
                         name: '',
