@@ -25,8 +25,9 @@
             </div>
             <button type="submit">Add task</button>
         </form>
+        <button @click="sort">Sort by name</button>
         <ul v-if="list.length > 0">
-            <shopping-item :product="item" v-for="(item, index) in list" :key="index"  @remove="removeItem(index)"/>
+            <shopping-item :product="item" v-for="(item, index) in filteredList" :key="index"  @remove="removeItem(index)"/>
         </ul>
         <span v-else>Nothing to show</span>
     </div>
@@ -45,6 +46,7 @@ export default {
             newItem: {
                 name: '',
             },
+            sortDirection: false,
             list: [{
                 id: 0,
                 name: 'Milk',
@@ -55,6 +57,18 @@ export default {
                 name: 'Coffe',
                 qty: 10,
             }],
+        }
+    },
+    computed: {
+        filteredList() {
+            if (!this.sortDirection) {
+                return this.list.sort();
+                this.sortDirection = true
+            }
+
+            this.sortDirection = false
+
+            return this.list.reverse();
         }
     },
     methods: {
@@ -79,6 +93,9 @@ export default {
         },
         removeItem(id) {
             this.list.splice(id, 1);
+        },
+        sort() {
+            this.sortDirection = true;
         },
     }
 };
