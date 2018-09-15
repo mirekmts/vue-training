@@ -23,7 +23,6 @@
             <div v-show="errors.has('productQty')">
                 {{ errors.first('productQty') }}
             </div>
-            
             <button type="submit">Add task</button>
         </form>
         <ul>
@@ -62,7 +61,7 @@ export default {
                 const text = this.newItem.name.trim();
                 const qtyToInt = parseInt(this.newItem.qty)
                 const isNumber = Number.isInteger(qtyToInt)
-                
+
                 if (text && isNumber) {
                     this.list.push({
                         id: this.list.length,
