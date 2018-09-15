@@ -3,19 +3,29 @@
         <h2>{{ title }}</h2>
         <form @submit.prevent="addItem">
             <input
-                name="task"
-                v-model="newItem" 
+                name="productName"
+                v-model="newItem.name" 
                 type="text"
-                placeholder="add shopping list item"
+                placeholder="add shopping list name"
                 v-validate="'required'"
             >
-            <button type="submit">Add task</button>
-            <div v-show="errors.has('task')">
-                {{ errors.first('task') }}
+            <div v-show="errors.has('productName')">
+                {{ errors.first('productName') }}
             </div>
+            <input
+                name="productQty"
+                v-model="newItem.qty" 
+                type="text"
+                placeholder="add qty "
+                v-validate="{ required: true, numeric: true }"
+            >
+            <div v-show="errors.has('productQty')">
+                {{ errors.first('productQty') }}
+            </div>
+            <button type="submit">Add task</button>
         </form>
         <ul>
-            <li v-for="(item, key) in list" v-bind:key="item.id">{{ item.name }}   <button @click="removeItem(key)">Remove</button></li>
+            <li v-for="(item, key) in list" v-bind:key="item.id">{{ item.name }}, {{ item.qty }}   <button @click="removeItem(key)">Remove</button></li>
         </ul>
     </div>
 </template>
@@ -25,27 +35,25 @@ export default {
     data () {
         return {
             title: 'What you need to buy',
-            newItem: '',
-            list: [{
-                id: 0,
-                name: 'Milk',
-            }, {
-                id: 1,
-                name: 'Potato',
-            }],
+            newItem: {
+                name: '',
+            },
+            list: [],
         }
     },
     methods: {
         addItem() {
             this.$validator.validateAll().then(result => {
-                const text = this.newItem.trim();
-
-                if (text) {
+                const text = this.newItem.name.trim();
+                const isNumber = Number.isInteger(this.newItem.qty)
+                if (text && isNumber) {
                     this.list.push({
                         id: this.list.length,
-                        name: text,
+                        ...this.newItem,
                     });
-                    this.newItem = '';
+                    this.newItem = {
+                        name: '',
+                    };
                     this.$validator.reset();
                 }
             });
