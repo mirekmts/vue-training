@@ -25,18 +25,20 @@
             </div>
             <button type="submit">Add task</button>
         </form>
-        <ul>
-            <li v-for="(item, key) in list" v-bind:key="item.id">
-                <span>Name: {{ item.name }}</span>
-                <span class="margin-left-10">Qty: {{ item.qty }}</span>
-                <button class="margin-left-10" @click="removeItem(key)">Remove</button>
-            </li>
+        <ul v-if="list.length > 0">
+            <shopping-item :product="item" v-for="(item, index) in list" :key="index"  @remove="removeItem(index)"/>
         </ul>
+        <span v-else>Nothing to show</span>
     </div>
 </template>
 
 <script>
+import ShoppingItem from '../components/ShoppingItem';
+
 export default {
+    components: {
+        ShoppingItem
+    },
     data () {
         return {
             title: 'What you need to buy',
